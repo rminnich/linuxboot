@@ -1,4 +1,4 @@
-VER=5.4.0
+VER=5.16.0
 default: build
 
 build: uCore flashkernel
@@ -19,18 +19,21 @@ qemu: uCore flashkernel
 	echo NO
 	exit 0
 
-netbooturoot:
-	GOARCH=arm u-root \
+netbooturoot: Makefile
+	GOARCH=arm \
+	       GO111MODULE=off \
+	       u-root \
 	       -o uroot.cpio \
 		-files ~/.ssh/cpu_rsa.pub:key.pub \
 		-files ~/.ssh/cpu_rsa:id_rsa \
 		-files ~/.ssh/authorized_keys:authorized_keys \
+		github.com/u-root/cpu/cmds/cpud \
 		all
 
-flashkernel:
+flashkernel: config-$(VER)
 	cp config-$(VER) linux/.config
 	(cd linux && ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make oldconfig && ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make -j32)
-	mkimage -C none -A arm -n 'kernel for Allwinner A10' -d linux/arch/arm/boot/zImage -T kernel -a 0x40008000 -e 0x40008000 kernel
+	mkimage -C none -A arm -n 'kernel for Allwinner A10' -d linux/arch/arm/boot/zImage -T kernel -a 0x40008000 -e 0x40008000 uImage
 	cp linux/arch/arm/boot/zImage flashkernel
 
 fetch: getkernel geturoot
