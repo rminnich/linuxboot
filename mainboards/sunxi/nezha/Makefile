@@ -29,7 +29,7 @@ fetch: getkernel geturoot
 
 getkernel:
 	rm -rf linux
-	git clone --depth=1 -b v5.15.5-openwrt --single-branch https://github.com/orangecms/linux
+	git clone --depth=1 -b 5.18-kexec --single-branch https://github.com/orangecms/linux
 
 geturoot:
 	GO111MODULE=off go get -u github.com/u-root/u-root
