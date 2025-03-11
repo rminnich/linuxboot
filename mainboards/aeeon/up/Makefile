@@ -36,6 +36,7 @@ prepgows:
 
 getfiano:
 	go install github.com/linuxboot/fiano/cmds/utk@latest
+	go install github.com/linuxboot/fiano/cmds/guid2english@latest
 
 # initramfs
 
@@ -125,6 +126,7 @@ image.bin:
 		remove Tcg.* \
 		remove Ish.* \
 		remove Setup \
+		replace_pe32 Shell 
 		save image.bin
 	utk image.bin table | guid2english | grep Free
 	# FIXME: What is this?
@@ -134,7 +136,8 @@ image.bin:
 getrom:
 	echo you can put a wget here
 	echo and unxip it 
-	echo and cp it to sr630.bin
+	echo and cp it to ROM.bin
+	echo see "https://www.aaeon.com/en/product/detail/iot-gateway-maker-boards-up-squared/download"
 
 readrom:
 	echo You need to get a ROM image from *somewhere*
